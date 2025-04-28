@@ -1,8 +1,8 @@
 package com.example.lab5
 
-class StudyActivity (
+data class StudyActivity(
     val nombre: String,
     val tipo: String,
     val fecha: String,
-    var progreso: Int
+    val progreso: Int,
 )

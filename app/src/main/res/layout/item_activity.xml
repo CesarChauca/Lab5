@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardItem"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <!-- ICONO TIPO EMOJI -->
+        <TextView
+            android:id="@+id/textView_icono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📚"
+            android:textSize="32sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- NOMBRE DE ACTIVIDAD -->
+        <TextView
+            android:id="@+id/textView_nombre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Nombre Actividad"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/textView_icono"
+            app:layout_constraintTop_toTopOf="@id/textView_icono"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingStart="8dp"/>
+
+        <!-- TIPO DE ACTIVIDAD -->
+        <TextView
+            android:id="@+id/textView_tipo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Tipo de Actividad"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            app:layout_constraintStart_toStartOf="@id/textView_nombre"
+            app:layout_constraintTop_toBottomOf="@id/textView_nombre"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- FECHA DE ENTREGA -->
+        <TextView
+            android:id="@+id/textView_fecha"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Fecha de entrega"
+            android:textSize="14sp"
+            android:textColor="#888888"
+            app:layout_constraintStart_toStartOf="@id/textView_nombre"
+            app:layout_constraintTop_toBottomOf="@id/textView_tipo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <!-- PROGRESO -->
+        <TextView
+            android:id="@+id/textView_progreso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Progreso: 80%"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/textView_icono"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

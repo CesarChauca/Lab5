@@ -3,7 +3,7 @@
     <string name="nav_register">Registrar</string>
     <string name="nav_history">Historial</string>
     <string name="nav_summary">Resumen</string>
-    <string name="recycler_view_description">Lista de elementos históricos</string>
+    <string name="recycler_view_description">Historial de actividades</string>
     <string name="hint_note">Escribe tu nota aquí</string>
     <string name="btn_save">Guardar</string>
 </resources>

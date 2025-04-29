@@ -1,36 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center"
-    tools:context=".RegisterFragment">
+    tools:context=".RegisterFragment"
+    android:padding="16dp">
 
-    <Spinner
-        android:id="@+id/spinner_emotions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:minHeight="48dp" />
-
+    <!-- Nombre de la Actividad -->
     <EditText
-        android:id="@+id/editText_note"
-        android:layout_width="match_parent"
+        android:id="@+id/editText_name"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_note"
-        android:inputType="textMultiLine"
-        android:layout_marginBottom="16dp"
-        android:padding="12dp"
-        android:minHeight="100dp"
-        android:gravity="top|start" />
+        android:hint="Nombre de la Actividad"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_width="match_parent"
+    <!-- Tipo de Actividad -->
+    <Spinner
+        android:id="@+id/spinner_type"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/btn_save"
+        app:layout_constraintTop_toBottomOf="@id/editText_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
-</LinearLayout>
+    <!-- Fecha de Entrega (con DatePickerButton) -->
+    <Button
+        android:id="@+id/button_select_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Seleccionar Fecha de Entrega"
+        app:layout_constraintTop_toBottomOf="@id/spinner_type"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Mostrar Fecha seleccionada -->
+    <TextView
+        android:id="@+id/textView_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Fecha no seleccionada"
+        app:layout_constraintTop_toBottomOf="@id/button_select_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:layout_marginTop="8dp" />
+
+    <!-- Progreso -->
+    <SeekBar
+        android:id="@+id/seekBar_progress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:max="100"
+        app:layout_constraintTop_toBottomOf="@id/textView_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Botón para Guardar -->
+    <Button
+        android:id="@+id/button_save_activity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Guardar Actividad"
+        app:layout_constraintTop_toBottomOf="@id/seekBar_progress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

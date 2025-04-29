@@ -18,7 +18,7 @@ class SummaryFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_summary, container, false)
-        summaryText = view.findViewById(R.id.text_summary)
+        //summaryText = view.findViewById(R.id.text_summary)
 
         val lastFiles = getLastFiles(7)
 

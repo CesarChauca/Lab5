@@ -1,90 +1,116 @@
 package com.example.lab5
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.AdapterView // Agrega esta importación
-import androidx.core.content.ContextCompat
-import android.widget.Toast
+import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
+import java.io.File
 import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
+import java.util.*
 
 class RegisterFragment : Fragment() {
 
-    private lateinit var emotionSpinner: Spinner
-    private lateinit var noteEditText: EditText
+    private lateinit var nameEditText: EditText
+    private lateinit var typeSpinner: Spinner
+    private lateinit var dateButton: Button
+    private lateinit var dateTextView: TextView
+    private lateinit var progressSeekBar: SeekBar
     private lateinit var saveButton: Button
-    private lateinit var rootView: View
+    private lateinit var rootView: ConstraintLayout
+
+    private var selectedDate: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view = inflater.inflate(R.layout.fragment_register, container, false)
-        rootView = view
+        rootView = view.findViewById(R.id.rootView_register)
 
-        emotionSpinner = view.findViewById(R.id.spinner_emotions)
-        noteEditText = view.findViewById(R.id.editText_note)
-        saveButton = view.findViewById(R.id.btn_save)
+        nameEditText = view.findViewById(R.id.editText_name)
+        typeSpinner = view.findViewById(R.id.spinner_type)
+        dateButton = view.findViewById(R.id.button_select_date)
+        dateTextView = view.findViewById(R.id.textView_date)
+        progressSeekBar = view.findViewById(R.id.seekBar_progress)
+        saveButton = view.findViewById(R.id.button_save_activity)
 
-        val emotions = arrayOf("Feliz", "Triste", "Enojado", "Sorpresa", "Neutral")
-
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, emotions)
-        emotionSpinner.adapter = adapter
-
-
-        emotionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                changeBackgroundColor()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-            }
-        }
-
-        saveButton.setOnClickListener {
-            saveEmotion()
-        }
+        setupSpinner()
+        setupDatePicker()
+        setupSaveButton()
 
         return view
     }
 
-    private fun changeBackgroundColor() {
-        val selectedEmotion = emotionSpinner.selectedItem.toString()
+    private fun setupSpinner() {
+        val types = arrayOf("Tarea", "Práctica", "Examen")
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, types)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        typeSpinner.adapter = adapter
+    }
 
-        when (selectedEmotion) {
-            "Feliz" -> rootView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.color_feliz))
-            "Triste" -> rootView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.color_triste))
-            "Enojado" -> rootView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.color_enojado))
-            "Sorpresa" -> rootView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.color_sorpresa))
-            "Neutral" -> rootView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.color_neutral))
+    private fun setupDatePicker() {
+        dateButton.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
+                selectedDate = String.format("%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear)
+                dateTextView.text = selectedDate
+            }, year, month, day)
+
+            datePickerDialog.show()
         }
     }
 
-    private fun saveEmotion() {
-        val emotion = emotionSpinner.selectedItem.toString()
-        val note = noteEditText.text.toString()
+    private fun setupSaveButton() {
+        saveButton.setOnClickListener {
+            val name = nameEditText.text.toString().trim()
+            val type = typeSpinner.selectedItem.toString()
+            val progress = progressSeekBar.progress
 
-        if (emotion.isNotEmpty() && note.isNotEmpty()) {
-            val date = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())
-            val filename = "$date.txt"
-            val fileContent = "Emoción: $emotion\nNota: $note"
-
-            context?.openFileOutput(filename, Context.MODE_PRIVATE)?.use {
-                it.write(fileContent.toByteArray())
+            if (name.isEmpty()) {
+                Toast.makeText(requireContext(), "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
 
-            Toast.makeText(context, "Datos guardados con éxito", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(context, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
+            if (selectedDate.isEmpty()) {
+                Toast.makeText(requireContext(), "Debes seleccionar una fecha de entrega", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            saveActivity(name, type, selectedDate, progress)
+            Toast.makeText(requireContext(), "Actividad guardada con éxito", Toast.LENGTH_SHORT).show()
+
+            clearForm()
         }
+    }
+
+    private fun saveActivity(name: String, type: String, date: String, progress: Int) {
+        try {
+            val safeName = name.replace(" ", "_")
+            val safeDate = date.replace("/", "_")
+            val fileName = "${safeName}_${safeDate}.txt"
+            val fileContent = "$name\n$type\n$date\n$progress"
+            val file = File(requireContext().filesDir, fileName)
+            file.writeText(fileContent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(requireContext(), "Error al guardar la actividad", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun clearForm() {
+        nameEditText.setText("")
+        typeSpinner.setSelection(0)
+        dateTextView.text = "Fecha no seleccionada"
+        progressSeekBar.progress = 0
+        selectedDate = ""
     }
 }
